@@ -1,5 +1,5 @@
-import React from 'react';
-import styles from './products.less';
+
+import styles from './index.less';
 import ProductList from '@/components/ProductList';
 import axios from 'axios';
 import { useMutation, useQuery, useQueryClient } from 'umi';
