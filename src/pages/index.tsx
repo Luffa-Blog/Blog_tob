@@ -1,13 +1,21 @@
 
-import { useState } from 'react';
+
 import { ProLayout } from '@ant-design/pro-layout';
 import { Link, Outlet, useAppData, useLocation } from 'umi';
+import {loginDetection} from "../utils/loginDetection"
+
+
+
 
 
 
 export default function index() {
+
+  loginDetection()
   const { clientRoutes } = useAppData();
   const location = useLocation();
+
+
   // console.log(clientRoutes[1]);
 
   return (
