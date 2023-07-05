@@ -1,5 +1,5 @@
 
-const Lus = () => {
+const Lus = () =>{
    return (
        <p>LUS</p>
    )
