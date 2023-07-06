@@ -77,6 +77,7 @@ const rts = () => {
                     <div className="logo">
                         <img src={logo} alt="" />
                     </div>
+                    <div></div>
 
                     <div className="title">最简单的博客后台管理 </div>
                     <div className="form">
