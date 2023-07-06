@@ -9,7 +9,11 @@ import {loginDetection} from "../utils/loginDetection"
 
 
 
+
 export default function index() {
+
+
+
 
   loginDetection()
   const { clientRoutes } = useAppData();
