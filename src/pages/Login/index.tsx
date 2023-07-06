@@ -35,14 +35,14 @@ const rts = () => {
         const res = await loginApi(user, pwd, qrcode, watch);
         // 登陆成功
 
-        if(res.code===200){
+        if (res.code === 200) {
             window.localStorage.setItem("token", res.data.token);
             console.log(window.localStorage.getItem("token"));
 
             if (window.localStorage.getItem("token")) {
                 history.push("/");
             }
-        }else{
+        } else {
             setQRCode("");
             fetchQRCodeImg()
             setPwd("");
@@ -77,6 +77,7 @@ const rts = () => {
                     <div className="logo">
                         <img src={logo} alt="" />
                     </div>
+                    <div></div>
 
                     <div className="title">最简单的博客后台管理 </div>
                     <div className="form">
