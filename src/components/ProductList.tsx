@@ -1,10 +1,15 @@
-import { Button, Popconfirm, Table } from 'antd';
+import { Button, Popconfirm, Table, message } from 'antd';
 import React from 'react';
+
 
 const ProductList: React.FC<{ products: { name: string }[]; onDelete: (id: string) => void }> = ({
     onDelete,
     products,
 }) => {
+
+
+
+
     const columns = [
         {
             title: 'Name',
@@ -14,9 +19,13 @@ const ProductList: React.FC<{ products: { name: string }[]; onDelete: (id: strin
             title: 'Actions',
             render(text: any, record: any) {
                 return (
-                    <Popconfirm title="Delete?" onConfirm={() => onDelete(record.id)}>
-                        <Button>Delete</Button>
-                    </Popconfirm>
+                    <>
+                    
+                        <Popconfirm title="Delete?" onConfirm={() => onDelete(record.id)}>
+                            <Button>Delete</Button>
+                        </Popconfirm>
+                    </>
+                  
                 );
             },
         },
