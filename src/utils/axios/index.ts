@@ -34,8 +34,7 @@ const newRequest = (url: string, params: any, method: string, onError: any) =>
             timeout: 60000,
             withCredentials: false,
             headers: {
-                "Access-Token": localStorage.token,
-                "Access-Control-Allow-Origin": "*"
+                "Authorization": "Bearer "+localStorage.token,
             },
             ...params
         };

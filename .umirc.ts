@@ -11,11 +11,10 @@ export default defineConfig({
     {
       path: "/", component: "index",
       routes: [
-        { path: "/", component: "@/pages/pps", name: "home" },
-        { path: "/docs", component: "@/pages/docs", name: 'docs' },
-        { path: '/products', component: "@/pages/products", name: 'products' },
+        { path: "/", component: "@/pages/articel", name: "文章管理" },
+        { path: "/docs", component: "@/pages/docs", name: '个人信息' },
+        { path: '/products', component: "@/pages/products", name: '友链信息' },
         { path: "/lus", component: "@/pages/lus", name: "lus" },
-        { path: "/pps", component: "@/pages/pps", name: "pps" },
 
       ]
 
@@ -29,9 +28,14 @@ export default defineConfig({
 
   proxy: {
     '/api': {
-      'target': 'http://sksigua.com/',
+      'target': 'http://localhost:3000',
       'changeOrigin': true,
-    
+
     },
+    // '/api': {
+    //   'target': 'http://sksigua.com/',
+    //   'changeOrigin': true,
+    
+    // },
   }
 });

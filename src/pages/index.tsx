@@ -6,6 +6,8 @@ import {loginDetection} from "../utils/loginDetection"
 
 
 
+import logo from '@/assets/image/logo.svg'
+
 
 
 
@@ -21,12 +23,19 @@ export default function index() {
 
 
   // console.log(clientRoutes[1]);
+  const chick=()=>{
+    console.log(1);
+    
+  }
 
   return (
     <ProLayout
+      logo={logo}
+      
       route={clientRoutes[1]}
       location={location}
-      title="Umi x Ant Design"
+      title="SK-Luffa"
+      onMenuHeaderClick={chick}//点击头部触发
       menuItemRender={(menuItemProps, defaultDom) => {
         if (menuItemProps.isUrl || menuItemProps.children) {
           return defaultDom;
