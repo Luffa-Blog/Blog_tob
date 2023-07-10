@@ -1,96 +1,99 @@
-import React, { useEffect, useState } from "react"
-import { Divider, Radio, Table,Button } from "antd"
-import type { ColumnsType } from 'antd/es/table';
-import { articelSelect } from "../../api/articel"
+import React, { useEffect, useState } from "react";
+import { Divider, Radio, Table, Button } from "antd";
+import type { ColumnsType } from "antd/es/table";
+import { articelSelect } from "../../api/articel";
+import SelectQuery from "../../components/SelectQuery/index";
 
 interface DataType {
-   key: React.Key;
-   id: number;
-   title: string;
-   content: string;
-   createDate: string;
-   class: string;
-   img: string;
+  key: React.Key;
+  id: number;
+  title: string;
+  content: string;
+  createDate: string;
+  class: string;
+  img: string;
 }
 
 // 表头
 const columns: ColumnsType<DataType> = [
-   {
-      title: "Id",
-      dataIndex: 'id',
-   },
-   {
-      title: "标题",
-      dataIndex: 'title',
-   },
-   {
-      title: "内容",
-      dataIndex: 'content',
-   },
-   {
-      title: "创建时间",
-      dataIndex: 'string',
-   },
-   {
-      title: "分类",
-      dataIndex: 'class',
-   },
-   {
-      title: "封面图",
-      dataIndex: 'img',
-   }
-]
+  {
+    title: "Id",
+    dataIndex: "id",
 
-
-
-const data: DataType[] = [];
-
-
+    align: "center",
+  },
+  {
+    title: "标题",
+    dataIndex: "title",
+    align: "center",
+  },
+  {
+    title: "内容",
+    dataIndex: "content",
+    align: "center",
+  },
+  {
+    title: "创建时间",
+    dataIndex: "createDate",
+    align: "center",
+  },
+  {
+    title: "分类",
+    dataIndex: "class",
+    align: "center",
+  },
+  {
+    title: "封面图",
+    dataIndex: "img",
+    align: "center",
+    
+  },
+  {
+    title: "操作",
+    dataIndex: "img",
+    align: "center",
+  },
+ 
+];
 
 const rts = () => {
-   const articelSelectData = async () => {
-      const resData = await articelSelect("", "")
+  const [datax, setdatax] = useState<DataType[]>();
 
-      if (resData.code == 200) {
+  const articelSelectData = async () => {
+    const resData = await articelSelect("", "");
 
-       return  resData.data.filter((item: DataType, index: number) => data.push(
-            {
-               key: index,
-               id: item.id,
-               title: item.title,
-               content: item.content,
-               createDate: item.createDate,
-               class: item.class,
-               img: item.img
-            }
-         ))
+    if (resData.code == 200) {
+      const sss = resData.data.map((item: DataType, index: number) => {
+        return {
+          key: item.id,
+          id: item.id,
+          title: item.title,
+          content: item.content,
+          createDate: item.createDate,
+          class: item.class ? "生活" : "技术",
+          img: item.img,
+        };
+      });
 
+      setdatax(sss);
 
-      }
+      // setdatax()
+      console.log(datax);
+    }
+  };
 
-   }
+  useEffect(() => {
+    articelSelectData();
+  }, []);
 
-
-
-   useEffect(() => {
-      const resdata = articelSelectData()
-
-   }, [])
-
-
-
-   return (
-      <div>
-         <div style={{ marginBottom: 16 }}>
-            {/* <Button type="primary" onClick={start} disabled={!hasSelected} loading={loading}>
-               Reload
-            </Button>
-            <span style={{ marginLeft: 8 }}>
-               {hasSelected ? `Selected ${selectedRowKeys.length} items` : ''}
-            </span> */}
-         </div>
-         <Table columns={columns} dataSource={data} />
+  return (
+    <div>
+      <div style={{ marginBottom: 16 }}>
+        <SelectQuery />
       </div>
-   )
-}
-export default rts
+
+      <Table columns={columns} dataSource={datax} tableLayout="fixed" />
+    </div>
+  );
+};
+export default rts;

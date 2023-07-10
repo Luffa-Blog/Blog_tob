@@ -68,6 +68,10 @@ const rts = () => {
     // 七天免登录
     const onPassLogOn = (checked: boolean) => {
         setWatch(checked);
+        console.log(watch);
+        
+  
+        
     };
 
     return (
@@ -77,7 +81,7 @@ const rts = () => {
                     <div className="logo">
                         <img src={logo} alt="" />
                     </div>
-                    <div></div>
+                    <div>{}</div>
 
                     <div className="title">最简单的博客后台管理 </div>
                     <div className="form">
