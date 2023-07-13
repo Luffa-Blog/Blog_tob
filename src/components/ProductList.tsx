@@ -23,7 +23,14 @@ const ProductList: React.FC<{
       },
     },
   ];
-  return <Table rowKey="id" dataSource={products} columns={columns} />;
+  return (
+    <Table
+      rowKey="id"
+     
+      dataSource={products}
+      columns={columns}
+    />
+  );
 };
 
 export default ProductList;
