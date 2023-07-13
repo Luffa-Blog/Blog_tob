@@ -3,9 +3,14 @@ import "@wangeditor/editor/dist/css/style.css"; // 引入 css
 import React, { useState, useEffect } from "react";
 import { Editor, Toolbar } from "@wangeditor/editor-for-react";
 import { IDomEditor, IEditorConfig, IToolbarConfig } from "@wangeditor/editor";
-import './index.less'
+import "./index.less";
 
-function MyEditor() {
+interface prpType {
+  content: string;
+  changeData: (data: any) => void;
+}
+
+function MyEditor({ content, changeData }: prpType) {
   // editor 实例
   const [editor, setEditor] = useState<IDomEditor | null>(null); // TS 语法
   // const [editor, setEditor] = useState(null)                   // JS 语法
@@ -50,16 +55,14 @@ function MyEditor() {
           style={{ borderBottom: "1px solid #ccc" }}
         />
         <Editor
-
           defaultConfig={editorConfig}
-          value={html}
+          value={content}
           onCreated={setEditor}
-          onChange={(editor) => setHtml(editor.getHtml())}
+          onChange={(editor) => changeData({ content: editor.getHtml() })}
           mode="default"
           style={{ height: "350px", overflowY: "hidden" }}
         />
       </div>
- 
     </>
   );
 }
