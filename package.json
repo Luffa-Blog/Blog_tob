@@ -15,6 +15,7 @@
     "@wangeditor/editor-for-react": "^1.0.6",
     "antd": "^5.6.3",
     "axios": "^1.4.0",
+    "dayjs": "^1.11.9",
     "umi": "^4.0.72"
   },
   "devDependencies": {
