@@ -6,14 +6,13 @@ import {
   DatePicker,
   type DatePickerProps,
   RadioChangeEvent,
-  message,
 } from "antd";
 import MyEditor from "../WangEditor/index";
 import "./index.less";
 import dayjs from "dayjs";
 import "dayjs/locale/zh-cn";
 import { useState, useEffect } from "react";
-import {articeladd} from "../../api/articel"
+
 
 interface Values {
   title: string;
@@ -37,25 +36,22 @@ interface CollectionCreateFormProps {
   onCancel: () => void;
   formData: DataType;
   changeData: (data: any) => void;
-  Initiator: string;
-  update: () => Promise<boolean>;
-  addlist: () => Promise<boolean>;
+  update:()=>Promise<boolean>;
 }
 
 const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
   open,
   onCreate,
-  Initiator,
   onCancel,
   formData,
   changeData,
   update,
-  addlist,
 }) => {
   const [form] = Form.useForm();
 
   const onChange: DatePickerProps["onChange"] = (date, dateString) => {
-    changeData({ createDate: date });
+
+       changeData({ createDate: date});
     console.log(date, dateString);
   };
   // const changeClassRadio = (e: RadioChangeEvent) => {
@@ -74,36 +70,16 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
       okText="Create"
       cancelText="Cancel"
       onCancel={onCancel}
-      onOk={async () => {
-       
-        switch (Initiator) {
-          case "add":
-            const addres = await addlist();
-             if (addres) {
-               message.success('添加成功');
-               onCancel();
-             } else {
-               message.error("添加失败");
-               onCancel();
-             }
-            return;
-          case "update":
-            const res = await update();
-            if (res) {
-              message.success("修改成功");
-              onCancel();
-            } else {
-              message.error("修改失败");
-              onCancel();
-            }
+      onOk={async() => {
+       const res=await update()
 
-            return;
-        }
+       console.log(res,"23112s");
+       
+        onCancel()
       }}
     >
       <Form
         className="from"
-         name="formData"
         form={form}
         layout="vertical"
         initialValues={{ modifier: "public" }}
@@ -144,25 +120,21 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
               onChange={onChange}
               value={dayjs(formData.createDate)}
               className="datepicker"
+            
             />
           </Form.Item>
-
           <Form.Item label="分类" className="fromItem">
-            <Radio.Group
-              className="classification"
-              value={formData.type}
-              onChange={(e) => {
-                changeData({ type: e.target.value });
-              }}
-            >
+            <Radio.Group className="classification" value={formData.type} onChange={(e)=>{
+               changeData({ type: e.target.value });
+            }}>
               <Radio value={false}>技术</Radio>
               <Radio value={true}>生活</Radio>
             </Radio.Group>
           </Form.Item>
         </div>
 
-        <Form.Item label="封面图" name="content">
-          <MyEditor   />
+        <Form.Item label="封面图">
+          <MyEditor content={formData.content} changeData={changeData} />
         </Form.Item>
       </Form>
     </Modal>
