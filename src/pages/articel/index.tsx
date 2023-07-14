@@ -1,11 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { Divider, Radio, Table, Button } from "antd";
+import { Divider, Radio, Table, Button, message } from "antd";
 import type { ColumnsType } from "antd/es/table";
-import { articelSelect, articelUpdate } from "../../api/articel";
+import {
+  articelSelect,
+  articelUpdate,
+  articeladd,
+  articeldel,
+} from "../../api/articel";
 import SelectQuery from "../../components/SelectQuery/index";
 import { CollectionCreateForm } from "../../components/CollectionCreateFrom/index";
 
 import "./index.less";
+import dayjs from "dayjs";
 
 interface DataType {
   key: React.Key;
@@ -23,14 +29,14 @@ const rts = () => {
   // 修改页面
   const [open, Setopen] = useState<boolean>(false);
   const [formData, setFromData] = useState<DataType>({
-    title: "123",
+    title: "",
     key: 0,
     id: 0,
-    content: "312",
-    createDate: "231",
-    class: "312",
+    content: "",
+    createDate: dayjs(new Date()).toString(),
+    class: "",
     type: false,
-    img: "321xw",
+    img: "",
   });
 
   const onCreate = (values: any) => {
@@ -40,7 +46,7 @@ const rts = () => {
 
   //   修改完毕进行提交
 
-  const update = async ():Promise<boolean> => {
+  const update = async (): Promise<boolean> => {
     const date = await articelUpdate(
       {
         title: formData.title,
@@ -51,12 +57,54 @@ const rts = () => {
       },
       formData.id
     );
-    if(date.code==200){
+    if (date.code == 200) {
+      return true;
+    }
+    return false;
+  };
+  // 新增数据
+  const addlist = async (): Promise<boolean> => {
+    const date = await articeladd({
+      title: formData.title,
+      content: formData.content,
+      createDate: formData.createDate,
+      class: formData.class,
+      img: formData.img,
+    });
+    if (date.code == 200) {
+      return true;
+    }
+    return false;
+  };
 
-      return true
-    } 
-    return false
+  //   删除数据
+  const del = async (id: number): Promise<boolean> => {
+    const res = await articeldel(id);
 
+    if ((res.code = 200)) {
+      return true;
+    }
+    return false;
+  };
+
+  //   点击新增
+
+  const add = async () => {
+    await setInitiator("add");
+    const data = {
+      title: "",
+      key: 0,
+      id: 0,
+      content: "",
+      createDate: dayjs(new Date()).toString(),
+      class: "",
+      type: false,
+      img: "",
+    };
+
+    await setFromData({ ...formData, ...data });
+
+    await Setopen(true);
   };
   //   点击修改
   const modify = async (id: number | string) => {
@@ -76,9 +124,13 @@ const rts = () => {
         };
       });
 
-      await setFromData(sss[0]);
+      await setFromData({ ...formData, ...sss[0] });
+
+      // await setFromData({ ...formData,...{content:"<p> 123312123</p>"} });
+      await Setopen(true);
+      console.log(formData);
+      setInitiator("update");
     }
-    await Setopen(true);
   };
 
   // 标题
@@ -133,8 +185,14 @@ const rts = () => {
             type="primary"
             danger
             className="btn delete"
-            onClick={() => {
-              console.log(id);
+            onClick={async () => {
+              const res = await del(id);
+              if (res) {
+
+                 articelSelectData();
+               return  message.success("删除成功");
+              }
+              return message.error("删除失败");
             }}
           >
             删除
@@ -148,6 +206,8 @@ const rts = () => {
 
   const [title, setTitle] = useState<string>("");
 
+  const [Initiator, setInitiator] = useState<string>("update");
+
   // 查询
   const changeTitle = (text: string) => {
     setTitle(text);
@@ -157,22 +217,6 @@ const rts = () => {
   const changeData = (valuex: DataType) => {
     setFromData({ ...formData, ...valuex });
   };
-  //   修改分类选择
-  const changeClass = (value: boolean) => {
-    const data: DataType = {
-      key: formData.id,
-      id: formData.id,
-      title: formData.title,
-      content: formData.content,
-      createDate: formData.createDate,
-      class: value ? "技术" : "生活",
-      type: value,
-      img: formData.img,
-    };
-    setFromData(data);
-  };
-
-  // const [date, setDate] = useState(new Date()); //创建时间x
 
   // 数据请求渲染
   const articelSelectData = async (title = "", data = "") => {
@@ -207,6 +251,7 @@ const rts = () => {
       <div style={{ marginBottom: 16 }}>
         <CollectionCreateForm
           open={open}
+          Initiator={Initiator}
           onCreate={() => onCreate}
           onCancel={() => {
             Setopen(false);
@@ -214,6 +259,7 @@ const rts = () => {
           formData={formData}
           changeData={changeData}
           update={update}
+          addlist={addlist}
           //  changeClass={changeClass}
           //   setFromData={setFromData}
         />
@@ -222,6 +268,7 @@ const rts = () => {
           title={title}
           articelSelectData={articelSelectData}
           changeTitle={changeTitle}
+          add={add}
         />
       </div>
 

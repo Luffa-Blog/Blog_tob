@@ -6,11 +6,11 @@ import { IDomEditor, IEditorConfig, IToolbarConfig } from "@wangeditor/editor";
 import "./index.less";
 
 interface prpType {
-  content: string;
-  changeData: (data: any) => void;
+  value?: string;
+  onChange?: (data: any) => void;
 }
 
-function MyEditor({ content, changeData }: prpType) {
+function MyEditor({ value, onChange }: prpType) {
   // editor 实例
   const [editor, setEditor] = useState<IDomEditor | null>(null); // TS 语法
   // const [editor, setEditor] = useState(null)                   // JS 语法
@@ -35,6 +35,11 @@ function MyEditor({ content, changeData }: prpType) {
     // const editorConfig = {                         // JS 语法
     placeholder: "请输入内容...",
   };
+  const reviseArticle = (e: any) => {
+    console.log("====================================");
+    console.log(e.toString());
+    console.log("====================================");
+  };
 
   // 及时销毁 editor ，重要！
   useEffect(() => {
@@ -56,9 +61,11 @@ function MyEditor({ content, changeData }: prpType) {
         />
         <Editor
           defaultConfig={editorConfig}
-          value={content}
+          value={value}
           onCreated={setEditor}
-          onChange={(editor) => changeData({ content: editor.getHtml() })}
+          onChange={(e) => {
+            if (onChange) onChange(e.getHtml());
+          }}
           mode="default"
           style={{ height: "350px", overflowY: "hidden" }}
         />

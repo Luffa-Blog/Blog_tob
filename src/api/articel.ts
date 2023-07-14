@@ -42,6 +42,36 @@ const articelUpdate = (data: DataType, id: number): Promise<any> => {
     }
 )}
 
+// 文章修改
+const articeladd= (data: DataType): Promise<any> => {
+    return rq({
+        url: "/api/articel/add",
+        method: "post",
+        param: {
+            newdata: data,
+        },
+        onerror: () => {
+            message.error("请求错误")
+        },
+    }
+    )
+}
+
+// 文章删除
+const articeldel= (id: number): Promise<any> => {
+    return rq({
+        url: "/api/articel/remove",
+        method: "post",
+        param: {
+            id: id,
+        },
+        onerror: () => {
+            message.error("请求错误")
+        },
+    }
+    )
+}
 
 
-export { articelSelect, articelUpdate }
+
+export { articelSelect, articelUpdate, articeladd, articeldel }
