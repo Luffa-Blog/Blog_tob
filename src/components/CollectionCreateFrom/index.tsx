@@ -12,43 +12,32 @@ import "./index.less";
 import dayjs from "dayjs";
 import "dayjs/locale/zh-cn";
 import { useState, useEffect } from "react";
-
+import {DataType} from "../../pages/articel/index"
 
 interface Values {
   title: string;
   description: string;
   modifier: string;
 }
-interface DataType {
-  key: React.Key;
-  id: number;
-  title: string;
-  content: string;
-  createDate: string;
-  class: string;
-  type: boolean;
-  img: string;
-}
+
 
 interface CollectionCreateFormProps {
   open: boolean;
-  onCreate: (values: Values) => void;
+  initialValues?: DataType;
   onCancel: () => void;
-  formData: DataType;
   changeData: (data: any) => void;
-  update:()=>Promise<boolean>;
+  onFinish?: (values: any) => void;
 }
 
 const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
   open,
-  onCreate,
+  initialValues,
+  onFinish,
   onCancel,
-  formData,
   changeData,
-  update,
 }) => {
   const [form] = Form.useForm();
-
+  console.log(initialValues)
   const onChange: DatePickerProps["onChange"] = (date, dateString) => {
 
        changeData({ createDate: date});
@@ -59,9 +48,7 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
   //   changeClass(e.target.value);
   // };
 
-  useEffect(() => {
-    console.log(formData);
-  }, []);
+
 
   return (
     <Modal
@@ -70,19 +57,19 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
       okText="Create"
       cancelText="Cancel"
       onCancel={onCancel}
-      onOk={async() => {
-       const res=await update()
-
-       console.log(res,"23112s");
-       
-        onCancel()
+      onOk={async () => {
+        form.submit();
       }}
     >
       <Form
         className="from"
         form={form}
         layout="vertical"
-        initialValues={{ modifier: "public" }}
+        initialValues={initialValues}
+        onValuesChange={(_, allValues) => {
+          console.log(allValues, "");
+        }}
+        onFinish={onFinish}
       >
         <div className="row1">
           <Form.Item
@@ -94,47 +81,29 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
                 message: "Please input the title of collection!",
               },
             ]}
+            name="title"
           >
-            <Input
-              placeholder="请输入名称"
-              value={formData.title}
-              onChange={(e) => {
-                changeData({ title: e.target.value });
-              }}
-            />
+            <Input placeholder="请输入名称" />
           </Form.Item>
-          <Form.Item label="封面图" className="fromItem">
-            <Input
-              placeholder="请输入封面图"
-              value={formData.img}
-              onChange={(e) => {
-                changeData({ img: e.target.value });
-              }}
-            />
+          <Form.Item label="封面图" className="fromItem" name="img">
+            <Input placeholder="请输入封面图" />
           </Form.Item>
         </div>
         <div className="row1">
-          <Form.Item label="创建时间" className="fromItem">
-            {/*  defaultValue={dayjs(getDate(), 'YYYY-MM-DD')}  */}
-            <DatePicker
-              onChange={onChange}
-              value={dayjs(formData.createDate)}
-              className="datepicker"
-            
-            />
+          <Form.Item label="创建时间" className="fromItem" name='createDate'>
+             {/* defaultValue={dayjs(getDate(), 'YYYY-MM-DD')}  */}
+            <DatePicker className="datepicker" />
           </Form.Item>
-          <Form.Item label="分类" className="fromItem">
-            <Radio.Group className="classification" value={formData.type} onChange={(e)=>{
-               changeData({ type: e.target.value });
-            }}>
+          <Form.Item label="分类" className="fromItem" name='class'>
+            <Radio.Group className="classification">
               <Radio value={false}>技术</Radio>
               <Radio value={true}>生活</Radio>
             </Radio.Group>
           </Form.Item>
         </div>
 
-        <Form.Item label="封面图">
-          <MyEditor content={formData.content} changeData={changeData} />
+        <Form.Item label="deitors" name='content'>
+          <MyEditor />
         </Form.Item>
       </Form>
     </Modal>

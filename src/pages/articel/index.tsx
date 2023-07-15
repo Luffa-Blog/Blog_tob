@@ -6,8 +6,9 @@ import SelectQuery from "../../components/SelectQuery/index";
 import { CollectionCreateForm } from "../../components/CollectionCreateFrom/index";
 
 import "./index.less";
+import dayjs from "dayjs";
 
-interface DataType {
+export interface DataType {
   key: React.Key;
   id: number;
   title: string;
@@ -40,7 +41,7 @@ const rts = () => {
 
   //   修改完毕进行提交
 
-  const update = async ():Promise<boolean> => {
+  const update = async (): Promise<boolean> => {
     const date = await articelUpdate(
       {
         title: formData.title,
@@ -51,12 +52,10 @@ const rts = () => {
       },
       formData.id
     );
-    if(date.code==200){
-
-      return true
-    } 
-    return false
-
+    if (date.code == 200) {
+      return true;
+    }
+    return false;
   };
   //   点击修改
   const modify = async (id: number | string) => {
@@ -69,16 +68,19 @@ const rts = () => {
           id: item.id,
           title: item.title,
           content: item.content,
-          createDate: item.createDate,
+          createDate: dayjs(item.createDate, "YYYY-MM-DD"),
           class: item.class,
           type: item.class,
           img: item.img,
         };
       });
 
-      await setFromData(sss[0]);
+      setFromData(sss[0]);
+      setTimeout(() =>{
+          Setopen(true);
+      },0)
     }
-    await Setopen(true);
+   
   };
 
   // 标题
@@ -207,13 +209,18 @@ const rts = () => {
       <div style={{ marginBottom: 16 }}>
         <CollectionCreateForm
           open={open}
-          onCreate={() => onCreate}
           onCancel={() => {
             Setopen(false);
           }}
-          formData={formData}
+          initialValues={formData}
+          onFinish={(value) => {
+
+             console.log(value,'onFinsih')
+            //  发送网络
+            // ....
+            Setopen(false)
+          }}
           changeData={changeData}
-          update={update}
           //  changeClass={changeClass}
           //   setFromData={setFromData}
         />

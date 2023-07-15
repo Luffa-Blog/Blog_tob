@@ -6,11 +6,11 @@ import { IDomEditor, IEditorConfig, IToolbarConfig } from "@wangeditor/editor";
 import "./index.less";
 
 interface prpType {
-  content: string;
-  changeData: (data: any) => void;
+  value?: string;
+  onChange?: (data: any) => void;
 }
 
-function MyEditor({ content, changeData }: prpType) {
+function MyEditor({ value, onChange }: prpType) {
   // editor 实例
   const [editor, setEditor] = useState<IDomEditor | null>(null); // TS 语法
   // const [editor, setEditor] = useState(null)                   // JS 语法
@@ -56,9 +56,9 @@ function MyEditor({ content, changeData }: prpType) {
         />
         <Editor
           defaultConfig={editorConfig}
-          value={content}
+          value={value}
           onCreated={setEditor}
-          onChange={(editor) => changeData({ content: editor.getHtml() })}
+          onChange={(editor) => {if(onChange) onChange(editor.getHtml());} }
           mode="default"
           style={{ height: "350px", overflowY: "hidden" }}
         />
