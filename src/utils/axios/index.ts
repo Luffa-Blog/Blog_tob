@@ -19,13 +19,9 @@ if (process.env.NODE_ENV === "development") {
     ROOT_URL = config.product;
 }
 
-const newRequest = (url: string, params: any, method: string, onError: any) =>
-    new Promise((resolve, reject) => {
-
-
-
+async function newRequest<T>(url: string, params: any, method: string, onError: any): Promise<T> {
+    return new Promise((resolve, reject) => {
         let postData = {};
-
 
         let turl = ROOT_URL + url;
         postData = {
@@ -34,7 +30,7 @@ const newRequest = (url: string, params: any, method: string, onError: any) =>
             timeout: 60000,
             withCredentials: false,
             headers: {
-                "Authorization": "Bearer "+localStorage.token,
+                "Authorization": "Bearer " + localStorage.token,
             },
             ...params
         };
@@ -68,11 +64,9 @@ const newRequest = (url: string, params: any, method: string, onError: any) =>
 
             });
     });
-const request = ({ url = "", param = {}, method = "get", onerror = {} }) => {
+}
 
-
-
-
+function request<T>({ url = "", param = {}, method = "get", onerror = {} }): Promise<T> {
     const Method = method.toLowerCase();
     if (Method === "post") {
         return newRequest(url, { data: param }, "post", onerror);
@@ -84,7 +78,7 @@ const request = ({ url = "", param = {}, method = "get", onerror = {} }) => {
         return newRequest(url, { params: param }, "delete", onerror,);
     }
     return newRequest(url, { params: param }, "get", onerror,); // 默认 Get 请求
-};
+}
 
 request.get = (url: string, param: any, onerror: any) =>
     request({ method: "get", url, param, onerror });
