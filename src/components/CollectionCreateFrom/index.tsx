@@ -6,13 +6,14 @@ import {
   DatePicker,
   type DatePickerProps,
   RadioChangeEvent,
+  FormInstance,
 } from "antd";
 import MyEditor from "../WangEditor/index";
 import "./index.less";
 import dayjs from "dayjs";
 import "dayjs/locale/zh-cn";
-import { useState, useEffect } from "react";
-import {DataType} from "../../pages/articel/index"
+import { useState, useEffect, useRef } from "react";
+import { DataType } from "../../pages/articel/index";
 
 interface Values {
   title: string;
@@ -20,12 +21,10 @@ interface Values {
   modifier: string;
 }
 
-
 interface CollectionCreateFormProps {
   open: boolean;
   initialValues?: DataType;
   onCancel: () => void;
-  changeData: (data: any) => void;
   onFinish?: (values: any) => void;
 }
 
@@ -34,40 +33,32 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
   initialValues,
   onFinish,
   onCancel,
-  changeData,
 }) => {
-  const [form] = Form.useForm();
-  console.log(initialValues)
-  const onChange: DatePickerProps["onChange"] = (date, dateString) => {
 
-       changeData({ createDate: date});
-    console.log(date, dateString);
-  };
-  // const changeClassRadio = (e: RadioChangeEvent) => {
+  const formRef = useRef<FormInstance>(null)
 
-  //   changeClass(e.target.value);
-  // };
-
-
+  console.log(initialValues, "initvalues");
 
   return (
     <Modal
       className="modal"
       open={open}
+      destroyOnClose
       okText="Create"
       cancelText="Cancel"
       onCancel={onCancel}
       onOk={async () => {
-        form.submit();
+        formRef.current?.submit();
       }}
     >
       <Form
         className="from"
-        form={form}
+        ref={formRef}
+        preserve={false}
         layout="vertical"
         initialValues={initialValues}
         onValuesChange={(_, allValues) => {
-          console.log(allValues, "");
+          console.log(allValues, "values");
         }}
         onFinish={onFinish}
       >
@@ -90,11 +81,11 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
           </Form.Item>
         </div>
         <div className="row1">
-          <Form.Item label="创建时间" className="fromItem" name='createDate'>
-             {/* defaultValue={dayjs(getDate(), 'YYYY-MM-DD')}  */}
+          <Form.Item label="创建时间" className="fromItem" name="createDate">
+            {/* defaultValue={dayjs(getDate(), 'YYYY-MM-DD')}  */}
             <DatePicker className="datepicker" />
           </Form.Item>
-          <Form.Item label="分类" className="fromItem" name='class'>
+          <Form.Item label="分类" className="fromItem" name="class">
             <Radio.Group className="classification">
               <Radio value={false}>技术</Radio>
               <Radio value={true}>生活</Radio>
@@ -102,7 +93,7 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
           </Form.Item>
         </div>
 
-        <Form.Item label="deitors" name='content'>
+        <Form.Item label="deitors" name="content">
           <MyEditor />
         </Form.Item>
       </Form>
